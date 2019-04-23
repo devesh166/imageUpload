@@ -44,23 +44,33 @@ app.post(('/image'), (req, res) => {
     return req.pipe(busboy);
 })
 
-// app.post(('/img'), (req, res) => {
-//     var base64Data = req.body.image.replace(/^data:image\/(?:jpeg|jpg|JPEG|JPG|png|PNG);base64,/, "");
-//     let extension
-//     fs.writeFile("uploads_image/" + filename + extension, base64Data, 'base64', function (err) {
-//         if (lowerCase.indexOf("png") !== -1) extension = ".png"
-//         else if (lowerCase.indexOf("jpg") !== -1 || lowerCase.indexOf("jpeg") !== -1)
-//             extension = ".jpg"
-//             var name = randomStringGenerator;
-//             var saveTo = './temp/' + name;
-//             file.pipe(fs.createWriteStream(saveTo));
-            
-
-//         if (err) {
-//             console.log(err);
-//         }
-//     });
-// })
+app.post(('/img'), (req, res) => {
+    var base64Data = req.body.image.replace(/^data:image\/(?:jpeg|jpg|JPEG|JPG|png|PNG);base64,/, "");
+    let extension;
+     if(lowerCaseData.indexOf('png') !== -1){
+            extension = '.png'
+        }else if(lowerCaseData.indexOf('jpg') !== -1){
+            extension = '.jpg'
+        }else if(lowerCaseData.indexOf('jpeg') !== -1){
+            extension = '.jpeg'
+        };
+    fs.writeFile("uploads_image/" + filename + extension, base64Data, 'base64', function (err) {
+          let newImage = new schema();
+        newImage.name =name;
+        newImage.path =saveTo;
+        newImage.save((err, users) => {
+            if (err) {
+                res.send(err)
+                return;
+            } else {
+                res.end("file uploaded");
+            }
+        })
+        if (err) {
+            console.log(err);
+        }
+    });
+})
 
 app.listen(port, () => {
     console.log("server listening on port " + port);
